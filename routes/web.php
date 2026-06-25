@@ -1,20 +1,34 @@
 <?php
-
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Kader\DashboardController as KaderDashboard;
+use App\Http\Controllers\Kader\BalitaController;
+use App\Http\Controllers\Kader\PengukuranController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PosyanduController;
+use App\Http\Controllers\Admin\LaporanController;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', fn() => redirect()->route('login'));
+
+// ── Kader ──────────────────────────────────────────
+Route::middleware(['auth', 'role:kader'])->prefix('kader')->name('kader.')->group(function () {
+    Route::get('/dashboard', [KaderDashboard::class, 'index'])->name('dashboard');
+
+    Route::resource('balita', BalitaController::class);
+    Route::resource('balita.pengukuran', PengukuranController::class)
+         ->shallow();
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// ── Admin ──────────────────────────────────────────
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('posyandu', PosyanduController::class);
+    Route::resource('users', UserController::class);
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
+    Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
 });
 
 require __DIR__.'/auth.php';
