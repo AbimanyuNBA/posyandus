@@ -24,10 +24,8 @@ class PengukuranController extends Controller
             'catatan'      => 'nullable|string|max:500',
         ]);
 
-        // Hitung usia dalam bulan pada tanggal pengukuran
-        $usiaBulan = $balita->usiaBuilanPada($validated['tanggal_ukur']);
+        $usiaBulan = $balita->usiaBulanPada($validated['tanggal_ukur']);
 
-        // Kalkulasi Z-score otomatis
         $zscore = $this->zscore->analisis(
             bb: (float) $validated['berat_badan'],
             tb: (float) $validated['tinggi_badan'],
@@ -42,12 +40,12 @@ class PengukuranController extends Controller
             'berat_badan'  => $validated['berat_badan'],
             'tinggi_badan' => $validated['tinggi_badan'],
             'usia_bulan'   => $usiaBulan,
-            'catatan'      => $validated['catatan'],
+            'catatan'      => $validated['catatan'] ?? null,
             ...$zscore,
         ]);
 
         return redirect()->route('kader.balita.show', $balita)
-                         ->with('success', 'Pengukuran berhasil disimpan. Status gizi: ' . $pengukuran->status_label);
+                         ->with('success', 'Pengukuran berhasil. Status: ' . $pengukuran->status_label);
     }
 
     public function destroy(Pengukuran $pengukuran)

@@ -14,6 +14,8 @@ class Pengukuran extends Model
 
     protected $casts = ['tanggal_ukur' => 'date'];
 
+    protected $table = 'pengukuran';
+
     public function balita()
     {
         return $this->belongsTo(Balita::class);

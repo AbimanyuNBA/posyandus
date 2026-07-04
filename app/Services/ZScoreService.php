@@ -5,11 +5,6 @@ use App\Models\ReferensiWho;
 
 class ZScoreService
 {
-    /**
-     * Hitung Z-score menggunakan metode LMS WHO 2006.
-     * Formula: Z = [(X/M)^L - 1] / (L * S)
-     * Jika L mendekati 0: Z = ln(X/M) / S
-     */
     public function hitungZScore(float $nilai, string $indikator, string $jenisKelamin, int $usiaBulan): ?float
     {
         $ref = ReferensiWho::where('jenis_kelamin', $jenisKelamin)
@@ -37,9 +32,6 @@ class ZScoreService
         return (pow($nilai / $M, $L) - 1) / ($L * $S);
     }
 
-    /**
-     * Hitung semua Z-score dan tentukan status gizi
-     */
     public function analisis(float $bb, float $tb, string $jk, int $usiaBulan): array
     {
         $zBbu  = $this->hitungZScore($bb, 'BB/U', $jk, $usiaBulan);
@@ -56,11 +48,7 @@ class ZScoreService
         ];
     }
 
-    /**
-     * Tentukan status gizi berdasarkan Z-score WHO
-     * Prioritas: TB/U untuk stunting, BB/U untuk gizi
-     */
-    private functionenentukanStatus(?float $zBbu, ?float $zTbu, ?float $zBbtb): string
+    private function enentukanStatus(?float $zBbu, ?float $zTbu, ?float $zBbtb): string
     {
         if ($zTbu !== null) {
             if ($zTbu < -3) return 'severely_stunting';

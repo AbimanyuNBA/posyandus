@@ -15,9 +15,15 @@ Route::get('/', fn() => redirect()->route('login'));
 Route::middleware(['auth', 'role:kader'])->prefix('kader')->name('kader.')->group(function () {
     Route::get('/dashboard', [KaderDashboard::class, 'index'])->name('dashboard');
 
-    Route::resource('balita', BalitaController::class);
+    Route::resource('balita', BalitaController::class)
+         -> parameters(['balita' =>'balita']);
+
     Route::resource('balita.pengukuran', PengukuranController::class)
-         ->shallow();
+         ->shallow()
+         ->only(['create', 'store', 'destroy'])
+         ->parameters(['balita'=>'balita']);
+    Route::delete('pengukuran/{pengukuran}', [PengukuranController::class, 'destroy'])
+     ->name('pengukuran.destroy');
 });
 
 // ── Admin ──────────────────────────────────────────
@@ -28,7 +34,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
-    Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
-});
+    Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])
+    ->name('laporan.excel');
+     });
 
 require __DIR__.'/auth.php';

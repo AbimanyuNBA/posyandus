@@ -1,65 +1,77 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Posyandu;
 use Illuminate\Http\Request;
 
 class PosyanduController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $posyandu = Posyandu::withCount('balita')
+            ->withCount(['balita as kader_count' => fn($q) =>
+                $q->getModel()->newQuery()
+                  ->from('users')
+                  ->whereColumn('posyandu_id', 'posyandu.id')
+            ])
+            ->latest()
+            ->paginate(15);
+
+        // Lebih simpel — hitung kader terpisah
+        $posyandu = Posyandu::withCount('balita')->latest()->paginate(15);
+
+        return view('admin.posyandu.index', compact('posyandu'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.posyandu.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama'       => 'required|string|max:100',
+            'alamat'     => 'nullable|string|max:255',
+            'kelurahan'  => 'required|string|max:100',
+            'kecamatan'  => 'required|string|max:100',
+            'kota'       => 'required|string|max:100',
+            'kontak'     => 'nullable|string|max:20',
+        ]);
+
+        Posyandu::create($validated);
+
+        return redirect()->route('admin.posyandu.index')
+                         ->with('success', 'Posyandu berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Posyandu $posyandu)
     {
-        //
+        return view('admin.posyandu.edit', compact('posyandu'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Posyandu $posyandu)
     {
-        //
+        $validated = $request->validate([
+            'nama'      => 'required|string|max:100',
+            'alamat'    => 'nullable|string|max:255',
+            'kelurahan' => 'required|string|max:100',
+            'kecamatan' => 'required|string|max:100',
+            'kota'      => 'required|string|max:100',
+            'kontak'    => 'nullable|string|max:20',
+        ]);
+
+        $posyandu->update($validated);
+
+        return redirect()->route('admin.posyandu.index')
+                         ->with('success', 'Data posyandu berhasil diperbarui.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Posyandu $posyandu)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $posyandu->delete();
+        return redirect()->route('admin.posyandu.index')
+                         ->with('success', 'Posyandu dihapus.');
     }
 }

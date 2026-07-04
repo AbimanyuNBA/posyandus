@@ -1,12 +1,16 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon; // <-- Pastikan Carbon di-import
 
 class Balita extends Model
 {
     use SoftDeletes;
+
+    protected $table = 'balita'; 
 
     protected $fillable = [
         'posyandu_id', 'nama', 'nik', 'tanggal_lahir',
@@ -31,7 +35,7 @@ class Balita extends Model
     }
 
     // Hitung usia dalam bulan dari tanggal lahir ke tanggal tertentu
-    public function usiaBuilanPada(?string $tanggal = null): int
+    public function usiaBulanPada(?string $tanggal = null): int
     {
         $tgl = $tanggal ? \Carbon\Carbon::parse($tanggal) : now();
         return (int) $this->tanggal_lahir->diffInMonths($tgl);

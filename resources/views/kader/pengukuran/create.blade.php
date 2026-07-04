@@ -9,7 +9,7 @@
         </a>
         <h1 class="text-xl font-semibold text-white mt-2">Input Pengukuran</h1>
         <p class="text-sm text-gray-500 mt-0.5">
-            {{ $balita->nama }} · {{ $balita->usiaBuilanPada() }} bulan
+            {{ $balita->nama }} · {{ $balita->usiaBulanPada() }} bulan
         </p>
     </div>
 
@@ -32,7 +32,7 @@
     </div>
 
     {{-- Form --}}
-    <form method="POST" action="{{ route('kader.pengukuran.store', $balita) }}"
+    <form method="POST" action="{{ route('kader.balita.pengukuran.store', $balita) }}"
           x-data="pengukuranForm()">
         @csrf
 

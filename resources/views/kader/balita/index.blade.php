@@ -69,7 +69,7 @@
                     </div>
                 </td>
                 <td class="px-5 py-3.5 text-gray-400 hidden md:table-cell">
-                    {{ $b->usiaBuilanPada() }} bulan
+                    {{ $b->usiaBulanPada() }} bulan
                 </td>
                 <td class="px-5 py-3.5 text-gray-400 hidden lg:table-cell">
                     {{ $b->nama_ortu }}
@@ -96,9 +96,9 @@
                 </td>
                 <td class="px-5 py-3.5">
                     <div class="flex items-center gap-2 justify-end">
-                        <a href="{{ route('kader.pengukuran.create', $b) }}"
-                           class="text-xs px-3 py-1.5 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20
-                                  rounded-lg transition-colors whitespace-nowrap">
+                        <a href="{{ route('kader.balita.pengukuran.create', $b) }}"
+                        class="text-xs px-3 py-1.5 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20
+                                rounded-lg transition-colors whitespace-nowrap">
                             + Ukur
                         </a>
                         <a href="{{ route('kader.balita.show', $b) }}"
