@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\LaporanController;
 
 Route::get('/', fn() => redirect()->route('login'));
 
-// ── Kader ──────────────────────────────────────────
+// Kader
 Route::middleware(['auth', 'role:kader'])->prefix('kader')->name('kader.')->group(function () {
     Route::get('/dashboard', [KaderDashboard::class, 'index'])->name('dashboard');
 
@@ -26,7 +26,7 @@ Route::middleware(['auth', 'role:kader'])->prefix('kader')->name('kader.')->grou
      ->name('pengukuran.destroy');
 });
 
-// ── Admin ──────────────────────────────────────────
+// Admin 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 

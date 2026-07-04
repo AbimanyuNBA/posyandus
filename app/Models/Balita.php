@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon; // <-- Pastikan Carbon di-import
+use Carbon\Carbon; 
 
 class Balita extends Model
 {
@@ -34,7 +34,7 @@ class Balita extends Model
         return $this->hasOne(Pengukuran::class)->latestOfMany('tanggal_ukur');
     }
 
-    // Hitung usia dalam bulan dari tanggal lahir ke tanggal tertentu
+    // Hitung usia dalam bulan dari tanggal lahir 
     public function usiaBulanPada(?string $tanggal = null): int
     {
         $tgl = $tanggal ? \Carbon\Carbon::parse($tanggal) : now();

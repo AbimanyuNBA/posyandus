@@ -18,7 +18,6 @@ class PosyanduController extends Controller
             ->latest()
             ->paginate(15);
 
-        // Lebih simpel — hitung kader terpisah
         $posyandu = Posyandu::withCount('balita')->latest()->paginate(15);
 
         return view('admin.posyandu.index', compact('posyandu'));
