@@ -2,7 +2,7 @@
 <x-slot name="title">Dashboard Admin</x-slot>
 
 <div class="mb-6">
-    <h1 class="text-xl font-semibold text-white">Dashboard</h1>
+    <h1 class="text-xl font-semibold text-[#0F766E]">Dashboard</h1>
     <p class="text-sm text-gray-500 mt-0.5">
         Monitoring stunting — {{ now()->translatedFormat('F Y') }}
     </p>
@@ -16,15 +16,15 @@
         ['label' => 'Total Balita',   'value' => $stats['total_balita'],   'color' => 'purple'],
         ['label' => 'Stunting Bulan Ini', 'value' => $stats['total_stunting'], 'color' => 'red'],
     ] as $card)
-    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
         <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">{{ $card['label'] }}</p>
         <p class="text-3xl font-semibold
             {{ match($card['color']) {
-                'teal'   => 'text-teal-400',
-                'blue'   => 'text-blue-400',
-                'purple' => 'text-purple-400',
-                'red'    => 'text-red-400',
-                default  => 'text-white',
+                'teal'   => 'text-teal-600',
+                'blue'   => 'text-blue-600',
+                'purple' => 'text-purple-600',
+                'red'    => 'text-red-600',
+                default  => 'text-gray-800',
             } }}">
             {{ $card['value'] }}
         </p>
@@ -36,8 +36,8 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
 
     {{-- Tren 6 bulan --}}
-    <div class="lg:col-span-2 bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <h2 class="text-sm font-medium text-gray-200 mb-4">
+    <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <h2 class="text-sm font-medium text-gray-700 mb-4">
             Tren status gizi — 6 bulan terakhir
         </h2>
         <div class="relative h-56">
@@ -46,8 +46,8 @@
     </div>
 
     {{-- Distribusi --}}
-    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <h2 class="text-sm font-medium text-gray-200 mb-4">
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <h2 class="text-sm font-medium text-gray-700 mb-4">
             Distribusi bulan ini
         </h2>
         <div class="relative h-56 flex items-center justify-center">
@@ -57,17 +57,17 @@
 </div>
 
 {{-- Tabel per posyandu --}}
-<div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-    <div class="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
-        <h2 class="text-sm font-medium text-gray-200">Rekap per posyandu</h2>
+<div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+    <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-gray-700">Rekap per posyandu</h2>
         <a href="{{ route('admin.laporan.index') }}"
-           class="text-xs text-teal-400 hover:text-teal-300 transition-colors">
+           class="text-xs text-teal-600 hover:text-teal-700 transition-colors">
             Lihat laporan lengkap →
         </a>
     </div>
     <table class="w-full text-sm">
         <thead>
-            <tr class="border-b border-gray-800">
+            <tr class="border-b border-gray-200">
                 <th class="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Posyandu</th>
                 <th class="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Kelurahan</th>
                 <th class="text-center px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total Balita</th>
@@ -75,20 +75,20 @@
                 <th class="text-center px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Stunting</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-800">
+        <tbody class="divide-y divide-gray-100">
             @foreach($perPosyandu as $p)
-            <tr class="hover:bg-gray-800/50 transition-colors">
-                <td class="px-5 py-3.5 text-gray-200 font-medium">{{ $p['nama'] }}</td>
-                <td class="px-5 py-3.5 text-gray-400">{{ $p['kelurahan'] }}</td>
-                <td class="px-5 py-3.5 text-center text-gray-300">{{ $p['total_balita'] }}</td>
-                <td class="px-5 py-3.5 text-center text-teal-400">{{ $p['diukur'] }}</td>
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-5 py-3.5 text-gray-800 font-medium">{{ $p['nama'] }}</td>
+                <td class="px-5 py-3.5 text-gray-500">{{ $p['kelurahan'] }}</td>
+                <td class="px-5 py-3.5 text-center text-gray-700">{{ $p['total_balita'] }}</td>
+                <td class="px-5 py-3.5 text-center text-teal-600 font-medium">{{ $p['diukur'] }}</td>
                 <td class="px-5 py-3.5 text-center">
                     @if($p['stunting'] > 0)
-                        <span class="px-2 py-0.5 rounded-full text-xs bg-red-500/10 text-red-400">
+                        <span class="px-2 py-0.5 rounded-full text-xs bg-red-50 text-red-600">
                             {{ $p['stunting'] }}
                         </span>
                     @else
-                        <span class="text-gray-600">0</span>
+                        <span class="text-gray-400">0</span>
                     @endif
                 </td>
             </tr>
@@ -112,24 +112,24 @@ new Chart(document.getElementById('chartTren'), {
             {
                 label: 'Normal',
                 data: grafikData.map(d => d.normal),
-                backgroundColor: '#1D9E7520',
-                borderColor: '#1D9E75',
+                backgroundColor: '#0F766E30',
+                borderColor: '#0F766E',
                 borderWidth: 1.5,
                 borderRadius: 4,
             },
             {
                 label: 'Stunting',
                 data: grafikData.map(d => d.stunting),
-                backgroundColor: '#E2534A20',
-                borderColor: '#E2534A',
+                backgroundColor: '#DC262630',
+                borderColor: '#DC2626',
                 borderWidth: 1.5,
                 borderRadius: 4,
             },
             {
                 label: 'Gizi Buruk/Kurang',
                 data: grafikData.map(d => d.gizi_buruk),
-                backgroundColor: '#EF9F2720',
-                borderColor: '#EF9F27',
+                backgroundColor: '#D9770630',
+                borderColor: '#D97706',
                 borderWidth: 1.5,
                 borderRadius: 4,
             },
@@ -138,10 +138,10 @@ new Chart(document.getElementById('chartTren'), {
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#9ca3af', font: { size: 11 } } } },
+        plugins: { legend: { labels: { color: '#4B5563', font: { size: 11 } } } },
         scales: {
-            x: { ticks: { color: '#6b7280', font: { size: 11 } }, grid: { color: '#1f2937' } },
-            y: { ticks: { color: '#6b7280', font: { size: 11 } }, grid: { color: '#1f2937' }, beginAtZero: true },
+            x: { ticks: { color: '#6B7280', font: { size: 11 } }, grid: { color: '#F3F4F6' } },
+            y: { ticks: { color: '#6B7280', font: { size: 11 } }, grid: { color: '#F3F4F6' }, beginAtZero: true },
         }
     }
 });
@@ -153,8 +153,8 @@ const statusLabels = {
     gizi_lebih: 'Gizi Lebih', obesitas: 'Obesitas',
 };
 const colors = {
-    normal: '#1D9E75', stunting: '#EF9F27', severely_stunting: '#E2534A',
-    gizi_buruk: '#993C1D', gizi_kurang: '#FAC775', gizi_lebih: '#378ADD', obesitas: '#534AB7',
+    normal: '#0F766E', stunting: '#D97706', severely_stunting: '#DC2626',
+    gizi_buruk: '#9A3412', gizi_kurang: '#FBBF24', gizi_lebih: '#3B82F6', obesitas: '#7C3AED',
 };
 const keys   = Object.keys(distribusi);
 new Chart(document.getElementById('chartDistribusi'), {
@@ -163,7 +163,7 @@ new Chart(document.getElementById('chartDistribusi'), {
         labels: keys.map(k => statusLabels[k] ?? k),
         datasets: [{
             data: keys.map(k => distribusi[k]),
-            backgroundColor: keys.map(k => colors[k] ?? '#6b7280'),
+            backgroundColor: keys.map(k => colors[k] ?? '#9CA3AF'),
             borderWidth: 0,
             hoverOffset: 6,
         }]
@@ -173,7 +173,7 @@ new Chart(document.getElementById('chartDistribusi'), {
         maintainAspectRatio: false,
         cutout: '70%',
         plugins: {
-            legend: { position: 'bottom', labels: { color: '#9ca3af', font: { size: 11 }, padding: 12 } }
+            legend: { position: 'bottom', labels: { color: '#4B5563', font: { size: 11 }, padding: 12 } }
         }
     }
 });
