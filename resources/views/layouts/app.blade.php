@@ -6,20 +6,20 @@
     <title>{{ $title ?? 'Sistem Monitoring Stunting' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full bg-gray-950 text-gray-100 font-sans antialiased"
+<body class="h-full bg-white text-gray-800 font-sans antialiased"
       x-data="{ sidebarOpen: false }">
 
     <div class="flex h-full">
 
         {{-- Sidebar --}}
-        <aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0
+        <aside class="w-64 bg-[#0F766E] border-r border-[#0C5C55] flex flex-col flex-shrink-0
                        hidden lg:flex">
             {{-- Logo --}}
-            <div class="px-6 py-5 border-b border-gray-800">
-                <span class="text-sm font-semibold tracking-widest uppercase text-teal-400">
+            <div class="px-6 py-5 border-b border-[#0C5C55]">
+                <span class="text-sm font-semibold tracking-widest uppercase text-white">
                     Stunting Monitor
                 </span>
-                <p class="text-xs text-gray-500 mt-0.5">
+                <p class="text-xs text-teal-100/70 mt-0.5">
                     {{ auth()->user()->posyandu?->nama ?? 'Puskesmas' }}
                 </p>
             </div>
@@ -38,25 +38,25 @@
             </nav>
 
             {{-- User info --}}
-            <div class="px-4 py-4 border-t border-gray-800">
+            <div class="px-4 py-4 border-t border-[#0C5C55]">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-teal-500/20 flex items-center
-                                justify-content-center text-teal-400 text-xs font-semibold
+                    <div class="w-8 h-8 rounded-full bg-white/15 flex items-center
+                                justify-content-center text-white text-xs font-semibold
                                 shrink-0 flex justify-center items-center">
                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-xs font-medium text-gray-200 truncate">
+                        <p class="text-xs font-medium text-white truncate">
                             {{ auth()->user()->name }}
                         </p>
-                        <p class="text-xs text-gray-500 capitalize">
+                        <p class="text-xs text-teal-100/70 capitalize">
                             {{ auth()->user()->role }}
                         </p>
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                                class="text-gray-500 hover:text-red-400 transition-colors"
+                                class="text-teal-100/70 hover:text-rose-200 transition-colors"
                                 title="Logout">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,15 +69,15 @@
         </aside>
 
         {{-- Main --}}
-        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-white">
 
             {{-- Topbar mobile --}}
             <header class="lg:hidden flex items-center justify-between
-                           px-4 py-3 bg-gray-900 border-b border-gray-800">
-                <span class="text-sm font-semibold text-teal-400 tracking-widest uppercase">
+                           px-4 py-3 bg-[#0F766E] border-b border-[#0C5C55]">
+                <span class="text-sm font-semibold text-white tracking-widest uppercase">
                     Stunting Monitor
                 </span>
-                <button @click="sidebarOpen = true" class="text-gray-400">
+                <button @click="sidebarOpen = true" class="text-white">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6h16M4 12h16M4 18h16"/>
@@ -87,8 +87,8 @@
 
             {{-- Flash message --}}
             @if(session('success'))
-            <div class="mx-6 mt-4 px-4 py-3 rounded-lg bg-teal-500/10 border border-teal-500/30
-                        text-teal-400 text-sm flex items-center gap-2"
+            <div class="mx-6 mt-4 px-4 py-3 rounded-lg bg-teal-50 border border-teal-200
+                        text-teal-700 text-sm flex items-center gap-2"
                  x-data x-init="setTimeout(() => $el.remove(), 4000)">
                 <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
@@ -100,7 +100,7 @@
             @endif
 
             {{-- Page content --}}
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 bg-white">
                 {{ $slot }}
             </main>
         </div>

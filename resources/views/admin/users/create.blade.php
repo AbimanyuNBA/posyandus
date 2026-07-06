@@ -4,48 +4,48 @@
 <div class="max-w-xl">
     <div class="mb-6">
         <a href="{{ route('admin.users.index') }}"
-           class="text-xs text-gray-500 hover:text-gray-300 transition-colors">← Kembali</a>
-        <h1 class="text-xl font-semibold text-white mt-2">Tambah Akun Kader</h1>
+           class="text-xs text-gray-500 hover:text-gray-700 transition-colors">← Kembali</a>
+        <h1 class="text-xl font-semibold text-gray-800 mt-2">Tambah Akun Kader</h1>
     </div>
 
     <form method="POST" action="{{ route('admin.users.store') }}">
         @csrf
-        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-4">
+        <div class="bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-sm">
 
             <div>
-                <label class="block text-xs font-medium text-gray-400 mb-1.5">
-                    Nama lengkap <span class="text-red-400">*</span>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                    Nama lengkap <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="name" value="{{ old('name') }}"
                        placeholder="Nama kader"
-                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
-                              text-sm text-gray-200 placeholder-gray-600 focus:outline-none
-                              focus:border-teal-500 transition-colors
+                       class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5
+                              text-sm text-gray-800 placeholder-gray-400 focus:outline-none
+                              focus:border-teal-500 focus:bg-white transition-colors
                               @error('name') border-red-500 @enderror">
-                @error('name') <p class="mt-1 text-xs text-red-400">{{ $message }}</p> @enderror
+                @error('name') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="block text-xs font-medium text-gray-400 mb-1.5">
-                    Email <span class="text-red-400">*</span>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                    Email <span class="text-red-500">*</span>
                 </label>
                 <input type="email" name="email" value="{{ old('email') }}"
                        placeholder="email@posyandu.test"
-                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
-                              text-sm text-gray-200 placeholder-gray-600 focus:outline-none
-                              focus:border-teal-500 transition-colors
+                       class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5
+                              text-sm text-gray-800 placeholder-gray-400 focus:outline-none
+                              focus:border-teal-500 focus:bg-white transition-colors
                               @error('email') border-red-500 @enderror">
-                @error('email') <p class="mt-1 text-xs text-red-400">{{ $message }}</p> @enderror
+                @error('email') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="block text-xs font-medium text-gray-400 mb-1.5">
-                    Posyandu <span class="text-red-400">*</span>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                    Posyandu <span class="text-red-500">*</span>
                 </label>
                 <select name="posyandu_id"
-                        class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
-                               text-sm text-gray-200 focus:outline-none focus:border-teal-500
-                               transition-colors @error('posyandu_id') border-red-500 @enderror">
+                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5
+                               text-sm text-gray-800 focus:outline-none focus:border-teal-500
+                               focus:bg-white transition-colors @error('posyandu_id') border-red-500 @enderror">
                     <option value="">Pilih posyandu</option>
                     @foreach($posyandu as $p)
                         <option value="{{ $p->id }}" {{ old('posyandu_id') == $p->id ? 'selected' : '' }}>
@@ -53,31 +53,31 @@
                         </option>
                     @endforeach
                 </select>
-                @error('posyandu_id') <p class="mt-1 text-xs text-red-400">{{ $message }}</p> @enderror
+                @error('posyandu_id') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">
-                        Password <span class="text-red-400">*</span>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                        Password <span class="text-red-500">*</span>
                     </label>
                     <input type="password" name="password"
                            placeholder="Min. 8 karakter"
-                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
-                                  text-sm text-gray-200 placeholder-gray-600 focus:outline-none
-                                  focus:border-teal-500 transition-colors
+                           class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5
+                                  text-sm text-gray-800 placeholder-gray-400 focus:outline-none
+                                  focus:border-teal-500 focus:bg-white transition-colors
                                   @error('password') border-red-500 @enderror">
-                    @error('password') <p class="mt-1 text-xs text-red-400">{{ $message }}</p> @enderror
+                    @error('password') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5">
-                        Konfirmasi password <span class="text-red-400">*</span>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                        Konfirmasi password <span class="text-red-500">*</span>
                     </label>
                     <input type="password" name="password_confirmation"
                            placeholder="Ulangi password"
-                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
-                                  text-sm text-gray-200 placeholder-gray-600 focus:outline-none
-                                  focus:border-teal-500 transition-colors">
+                           class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5
+                                  text-sm text-gray-800 placeholder-gray-400 focus:outline-none
+                                  focus:border-teal-500 focus:bg-white transition-colors">
                 </div>
             </div>
 
@@ -85,13 +85,13 @@
 
         <div class="flex gap-3 mt-4">
             <button type="submit"
-                    class="flex-1 py-2.5 bg-teal-500 hover:bg-teal-400 text-gray-950
-                           text-sm font-medium rounded-lg transition-colors">
+                    class="flex-1 py-2.5 bg-teal-600 hover:bg-teal-500 text-white
+                           text-sm font-medium rounded-lg transition-colors shadow-sm">
                 Buat akun kader
             </button>
             <a href="{{ route('admin.users.index') }}"
-               class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-400
-                      text-sm rounded-lg transition-colors">
+               class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700
+                      text-sm rounded-lg transition-colors border border-gray-200">
                 Batal
             </a>
         </div>

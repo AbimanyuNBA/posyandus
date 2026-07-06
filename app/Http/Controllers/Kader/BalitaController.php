@@ -3,6 +3,11 @@ namespace App\Http\Controllers\Kader;
 
 use App\Http\Controllers\Controller;
 use App\Models\Balita;
+use App\Support\PertumbuhanReferensi;
+use App\Exports\BalitaDetailExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class BalitaController extends Controller
@@ -63,9 +68,10 @@ class BalitaController extends Controller
             ->with('kader')
             ->paginate(10);
 
-        // Data untuk grafik pertumbuhan
+        // Data untuk grafik pertumbuhan (reorder() untuk membersihkan
+        // default sorting dari relasi/global scope yang bisa bikin urutan kebalik)
         $grafikData = $balita->pengukuran()
-            ->orderBy('tanggal_ukur')
+            ->reorder('tanggal_ukur', 'asc')
             ->get(['tanggal_ukur', 'berat_badan', 'tinggi_badan', 'usia_bulan', 'zscore_bbu', 'zscore_tbu']);
 
         return view('kader.balita.show', compact('balita', 'pengukuran', 'grafikData'));
@@ -106,10 +112,100 @@ class BalitaController extends Controller
                          ->with('success', 'Data balita dihapus.');
     }
 
+    public function exportPdf(Balita $balita)
+    {
+        $this->authorizeBalita($balita);
+
+        [$pengukuran, $terakhir, $chartBBU, $chartTBU] = $this->siapkanDataGrafik($balita);
+
+        $pdf = Pdf::loadView('kader.balita.detail_pdf', [
+            'balita'     => $balita,
+            'terakhir'   => $terakhir,
+            'pengukuran' => $pengukuran,
+            'chartBBU'   => $chartBBU,
+            'chartTBU'   => $chartTBU,
+        ]);
+
+        return $pdf->download('detail-' . Str::slug($balita->nama) . '.pdf');
+    }
+
+    public function exportExcel(Balita $balita)
+    {
+        $this->authorizeBalita($balita);
+
+        [$pengukuran, , $chartBBU, $chartTBU] = $this->siapkanDataGrafik($balita);
+
+        return Excel::download(
+            new BalitaDetailExport($balita, $pengukuran, $chartBBU, $chartTBU),
+            'detail-' . Str::slug($balita->nama) . '.xlsx'
+        );
+    }
+
     private function authorizeBalita(Balita $balita): void
     {
         if ($balita->posyandu_id !== auth()->user()->posyandu_id) {
             abort(403);
         }
     }
+
+    /**
+     * Helper bersama: ambil riwayat pengukuran (urut waktu) dan bangun
+     * URL grafik statis (via QuickChart) untuk dipakai di export PDF & Excel.
+     */
+    private function siapkanDataGrafik(Balita $balita): array
+    {
+        $pengukuran = $balita->pengukuran()->orderBy('tanggal_ukur')->get();
+        $terakhir   = $balita->pengukuranTerakhir;
+
+        $labels  = $pengukuran->map(fn ($p) => $p->usia_bulan . ' bln')->toArray();
+        $usiaArr = $pengukuran->pluck('usia_bulan')->toArray();
+        $bbData  = $pengukuran->pluck('berat_badan')->toArray();
+        $tbData  = $pengukuran->pluck('tinggi_badan')->toArray();
+
+        $chartBBU = PertumbuhanReferensi::buildChartUrl(
+            $labels,
+            'Berat badan (kg)',
+            $bbData,
+            PertumbuhanReferensi::refBBU2SD($usiaArr),
+            PertumbuhanReferensi::refBBU3SD($usiaArr),
+            '#1D9E75'
+        );
+
+        $chartTBU = PertumbuhanReferensi::buildChartUrl(
+            $labels,
+            'Tinggi badan (cm)',
+            $tbData,
+            PertumbuhanReferensi::refTBU2SD($usiaArr),
+            PertumbuhanReferensi::refTBU3SD($usiaArr),
+            '#378ADD',
+            'Batas -2 SD (stunting)',
+            'Batas -3 SD (severely stunting)'
+        );
+
+        return [$pengukuran, $terakhir, $chartBBU, $chartTBU];
+    }
+
+    public function kms(Balita $balita)
+{
+    $this->authorizeBalita($balita);
+
+    // Ambil semua pengukuran urut dari terlama
+    $pengukuran = $balita->pengukuran()
+        ->orderBy('tanggal_ukur', 'asc')
+        ->get();
+
+    // Siapkan data plot grafik — index berdasarkan usia bulan
+    $plotData = $pengukuran->mapWithKeys(fn($p) => [
+        $p->usia_bulan => [
+            'bb'     => (float) $p->berat_badan,
+            'tb'     => (float) $p->tinggi_badan,
+            'status' => $p->status_gizi,
+            'tanggal'=> $p->tanggal_ukur->format('m/Y'),
+            'nt'     => in_array($p->status_gizi, ['normal', 'gizi_lebih', 'obesitas']) ? 'N' : 'T',
+        ]
+    ]);
+
+    return view('kader.balita.kms', compact('balita', 'pengukuran', 'plotData'));
+}
+
 }

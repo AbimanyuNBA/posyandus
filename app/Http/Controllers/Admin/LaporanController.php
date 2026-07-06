@@ -12,8 +12,9 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $bulan      = $request->bulan ?? now()->month;
-        $tahun      = $request->tahun ?? now()->year;
+        // Tambahkan (int) agar selalu menjadi angka
+        $bulan      = (int) ($request->bulan ?? now()->month);
+        $tahun      = (int) ($request->tahun ?? now()->year);
         $posyanduId = $request->posyandu_id;
 
         $query = Pengukuran::with(['balita.posyandu', 'kader'])
@@ -42,8 +43,9 @@ class LaporanController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $bulan      = $request->bulan ?? now()->month;
-        $tahun      = $request->tahun ?? now()->year;
+        // Tambahkan (int) di sini
+        $bulan      = (int) ($request->bulan ?? now()->month);
+        $tahun      = (int) ($request->tahun ?? now()->year);
         $posyanduId = $request->posyandu_id;
 
         $query = Pengukuran::with(['balita.posyandu', 'kader'])
@@ -64,6 +66,7 @@ class LaporanController extends Controller
             'gizi_buruk' => $pengukuran->whereIn('status_gizi', ['gizi_buruk','gizi_kurang'])->count(),
         ];
 
+        // Karena $bulan sudah berupa (int), Carbon tidak akan error lagi di baris ini
         $namaBulan = \Carbon\Carbon::create()->month($bulan)->translatedFormat('F');
         $posyandu  = $posyanduId ? Posyandu::find($posyanduId)?->nama : 'Semua Posyandu';
 
@@ -76,10 +79,12 @@ class LaporanController extends Controller
 
     public function exportExcel(Request $request)
     {
-        $bulan      = $request->bulan ?? now()->month;
-        $tahun      = $request->tahun ?? now()->year;
+        // Tambahkan (int) di sini juga
+        $bulan      = (int) ($request->bulan ?? now()->month);
+        $tahun      = (int) ($request->tahun ?? now()->year);
         $posyanduId = $request->posyandu_id;
 
+        // $bulan sudah aman untuk Carbon
         $namaBulan = \Carbon\Carbon::create()->month($bulan)->format('F');
 
         return Excel::download(
